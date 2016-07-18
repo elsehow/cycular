@@ -91,34 +91,8 @@ Whenever a value comes over `inputS`, we `flatMap` values from a new source's ou
 
 a store takes
 
-### `store(hyperlog, dataS, ms, cnt)`
+### `store(hyperlog, listOfSources, ms, cnt)`
 
-returns a stream of values saved to `hyperlog` from `dataS`. the values emitted over this stream will be a list of length >= 1.
+returns a stream of values saved to `hyperlog` from some `listOfSources`. the values emitted over the `store`'s stream will be a list of length >= 1.
 
 buffers dataS by `ms` milliseconds or a count of `cnt` - whichever limit is hit first. configure this so as to control how often your script writes to disk.
-
-### example
-
-see `example/example.js`.
-
-```js
-var kefir = require('kefir')
-var timeserver = require('./sources/timeserver')
-var memdb = require('memdb')
-var hyperlog = require('hyperlog')
-var log = hyperlog(memdb(), {
-  valueEncoding: 'json'
-})
-
-var store = require('..').store
-
-var dataSourceSs = [
-  timeserver(kefir.interval(500,1), {
-    url: 'http://indra.webfactional.com/timeserver',
-  }),
-]
-
-var dataS         = kefir.merge(dataSourceSs)
-var loggedDataS   = store(log, dataS, 50, 100)
-loggedDataS.log('logged data')
-```
