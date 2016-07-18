@@ -1,8 +1,10 @@
 var kefir = require('kefir')
 
-function store (log, stream, ms, cnt) {
+function store (log, sources, ms, cnt) {
 
   var lastKeys = null
+
+  var stream = kefir.merge(sources)
 
   function saveToLog (values) {
     return kefir.fromNodeCallback(cb => {
