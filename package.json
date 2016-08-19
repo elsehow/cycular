@@ -17,6 +17,8 @@
     "unix-timestamp": "^0.2.0"
   },
   "dependencies": {
-    "kefir": "^3.3.0"
+    "kefir": "^3.3.0",
+    "monotonic-timestamp": "0.0.9",
+    "nanotimer": "^0.3.14"
   }
 }

@@ -1,14 +1,14 @@
 var request = require('request');
-var source = require('../..').source
 var timestamp = require('unix-timestamp')
+var kefir = require('kefir')
 /*
   Takes opts.url
   URL for the timeserver
 */
-function timeserver (inS, opts) {
-  function timeS () {
+function timeserver (interval, opts) {
+  function timeStream () {
     var requestedAt = Date.now()
-    return source('timeserver', function (emitter) {
+    return kefir.stream(function (emitter) {
       request(opts.url, function (error, response, body) {
         if (error)
           emitter.error(error)
@@ -22,7 +22,7 @@ function timeserver (inS, opts) {
       })
     })
   }
-  return inS.flatMap(timeS)
+  return kefir.interval(interval,1).flatMap(timeStream)
 }
 
 module.exports = timeserver

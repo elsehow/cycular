@@ -1,14 +1,17 @@
 var kefir = require('kefir')
-var timeserver = require('./sources/timeserver')
+var timeserver = require('./timeserver-stream')
 var memdb = require('memdb')
 var hyperlog = require('hyperlog')
 var log = hyperlog(memdb(), {
   valueEncoding: 'json'
 })
-var store = require('..').store
-var loggedDataS   = store(log, [
-  timeserver(kefir.interval(500,1), {
-    url: 'http://indra.webfactional.com/timeserver',
-  }),
+var cycular = require('..')
+var timeStream = timeserver(500, {
+  url: 'http://indra.webfactional.com/timeserver',
+})
+var loggedDataS   = cycular.store(log, [
+  cycular.source(timeStream)
 ], 50, 100)
-loggedDataS.log('logged data')
+loggedDataS
+  .map(v => v.map(v => v.value))
+  .log('logged data')
