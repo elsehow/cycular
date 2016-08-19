@@ -33,8 +33,14 @@ test('logs values from 2 sources', t => {
   function check (saved) {
     console.log('seeing', saved)
     t.equal(saved.length, 2)
-    t.deepEqual(saved[0].value.metadata.sourceName, 'example-source-1')
-    t.deepEqual(saved[1].value.metadata.sourceName, 'example-source-2')
+    t.deepEqual(saved[0].value.metadata.sourceName,
+                'example-source-1')
+    var timestamp0 = saved[0].value.metadata.timestamp
+    var timestamp1 = saved[1].value.metadata.timestamp
+    t.notEqual(timestamp0, timestamp1,
+               `timestamp0 ${timestamp0}, timestamp1 ${timestamp1}`)
+    t.deepEqual(saved[1].value.metadata.sourceName,
+                'example-source-2')
     loggedDataS.offValue(check)
     t.end()
     process.exit(0)

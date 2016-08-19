@@ -2,7 +2,8 @@
 
 log streams of data over time on a hyperlog
 
-items across multiple input streams are assigned [monotonic timestamps](https://www.npmjs.com/package/monotonic-timestamp), and batch-written to a [hyperlog](https://github.com/mafintosh/hyperlog), in which batches are causally linked through time.
+
+values across multiple [kefir](https://pozadi.github.io/kefir/) streams are assigned [monotonic timestamps](https://www.npmjs.com/package/monotonic-timestamp), and batch-written to a [hyperlog](https://github.com/mafintosh/hyperlog), in which batches are causally linked through time.
 
 ## example
 
@@ -46,13 +47,19 @@ loggedDataS
 
 ```
 
-
 ## install
 
 ```
 npm i --save cycular
 ```
 
+## api
+
+### cycular.source(inputS, [metadataF])
+
+`inputS` is a [kefir](https://pozadi.github.io/kefir/) stream.
+
+optional `metdataF(timestamp)` method takes a monotonic timestamp, and returns a value to be stored in `value.metadata`. (by default, `metadata: { timestamp: [monotonic timestamp] }`.
 
 see `example/example.js` for a more robust example
 
